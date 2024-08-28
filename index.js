@@ -1,5 +1,5 @@
 import process from 'node:process';
-import electron from 'electron';
+import electron,{nativeImage} from 'electron';
 import cliTruncate from 'cli-truncate';
 import {download} from 'electron-dl';
 import isDev from 'electron-is-dev';
@@ -28,6 +28,7 @@ const removeUnusedMenuItems = menuTemplate => {
 
 const create = (win, options) => {
 	const handleContextMenu = (event, properties) => {
+		console.log("🚀 ~ handleContextMenu ~ properties:", properties)
 		if (typeof options.shouldShowMenu === 'function' && options.shouldShowMenu(event, properties) === false) {
 			return;
 		}
@@ -42,6 +43,7 @@ const create = (win, options) => {
 			learnSpelling: decorateMenuItem({
 				id: 'learnSpelling',
 				label: '&Learn Spelling',
+				// icon:"./task_complete.png",
 				visible: Boolean(properties.isEditable && hasText && properties.misspelledWord),
 				click() {
 					const target = webContents(win);
@@ -88,6 +90,7 @@ const create = (win, options) => {
 				id: 'copy',
 				label: '&Copy',
 				enabled: can('Copy'),
+				icon:"./task_complete.png",
 				visible: properties.isEditable || hasText,
 				click(menuItem) {
 					const target = webContents(win);
@@ -183,8 +186,9 @@ const create = (win, options) => {
 				},
 			}),
 			copyImage: decorateMenuItem({
-				id: 'copyImage',
+				id: 'copyImage1',
 				label: 'Cop&y Image',
+				icon:"./task_complete.png",
 				visible: properties.mediaType === 'image',
 				click() {
 					webContents(win).copyImageAt(properties.x, properties.y);
@@ -346,8 +350,9 @@ const create = (win, options) => {
 			menu.popup(win);
 		}
 	};
-
+	console.log("🚀 ~ create ~ handleContextMenu????:", JSON.stringify(handleContextMenu))
 	webContents(win).on('context-menu', handleContextMenu);
+
 
 	return () => {
 		if (win.isDestroyed()) {

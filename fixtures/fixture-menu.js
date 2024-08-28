@@ -26,6 +26,9 @@ contextMenu({
 			label: 'Invisible',
 			visible: false,
 		},
+		actions.copyImage({
+
+		}),
 		actions.paste({
 			transform: content => `modified_paste_${content}`,
 		}),
